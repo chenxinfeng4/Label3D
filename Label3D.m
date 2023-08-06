@@ -107,7 +107,7 @@ classdef Label3D < Animator
     %
     %   Written by Diego Aldarondo (2019)
     %   Some code adapted from https://github.com/talmo/leap
-    properties (Access = private)
+    properties (Access = public)
         color
         joints
         origNFrames
@@ -229,6 +229,9 @@ classdef Label3D < Animator
             end
             
             % Ask for files to load, or load in multiple files.
+            if numel(varargin) == 0
+                return;
+            end
             obj.load(varargin{:})
         end
         
@@ -353,8 +356,9 @@ classdef Label3D < Animator
             obj.setUpKeypointTable();
             
             % Limit the default interactivity to useful interactions
-            for nAx = 1:numel(obj.Parent.Children)
-                ax = obj.Parent.Children(nAx);
+            Children = findobj(obj.Parent, 'type', 'Axes');
+            for nAx = 1:numel(Children)
+                ax = Children(nAx);
                 disableDefaultInteractivity(ax);
                 ax.Interactions = [zoomInteraction regionZoomInteraction rulerPanInteraction];
             end
@@ -669,6 +673,7 @@ classdef Label3D < Animator
             end
             f = obj.frameInds(obj.frame);
             obj.status(:,:,f) = 0;
+            obj.points3D(:,:,f) = nan;
             if ~isempty(obj.initialMarkers)
                 for nAnimator = 1:obj.nCams
                     obj.initialMarkers{nAnimator}(f,:,:) = nan;
@@ -822,7 +827,7 @@ classdef Label3D < Animator
                     end
                 case 'backspace'
                     obj.deleteSelectedNode();
-                case 't'
+                case {'t', 'f'}
                     obj.checkStatus();
                     
                     % Check if a node is held for any of the draggable
@@ -852,7 +857,8 @@ classdef Label3D < Animator
                     end
                     obj.reprojectPoints(obj.frameInds(obj.frame));
                     update(obj)
-                    if obj.autosave
+%                     if obj.autosave
+                    if false
                         obj.saveState()
                     end
                 case 'tab'
@@ -897,7 +903,7 @@ classdef Label3D < Animator
                     reset(obj);
                 case 'pageup'
                     obj.selectNode(1);
-                case 'f'
+                case 'g'
                     newFrame = inputdlg('Enter frame number:');
                     newFrame = str2double(newFrame);
                     if isnumeric(newFrame) && ~isempty(newFrame) && ~isnan(newFrame)
@@ -920,6 +926,10 @@ classdef Label3D < Animator
             
             % Extend Animator callback function
             keyPressCallback@Animator(obj,source,eventdata);
+            if contains(keyPressed, {'rightarrow', 'leftarrow', 'f'}) 
+                obj.resetAspectRatio();
+                obj.selectNode(1);
+            end
         end
         
         function resetAspectRatio(obj)
@@ -1152,6 +1162,8 @@ classdef Label3D < Animator
                 'XLim',lims,'YLim',lims,'ZLim',lims)
             arrayfun(@(X) set(X, 'Visible','on'), obj.kp3a.PlotSegments);
             obj.isKP3Dplotted = true;
+            axis(obj.kp3a.Axes, 'auto');
+            axis(obj.kp3a.Axes, 'equal');
         end
         
         function checkForClickedNodes(obj)
@@ -1429,18 +1441,19 @@ classdef Label3D < Animator
         
         function setUpKeypointTable(obj)
             f = figure('Units','Normalized','pos',obj.tablePosition,'Name','Keypoint table',...
-                'NumberTitle','off');
+                'NumberTitle','off', 'Menubar' , 'none');
             obj.jointsPanel = uix.Panel('Parent', f, 'Title', 'Joints',...
-                'Padding', 5,'Units','Normalized');
+                'Padding', 5,'Units','Normalized', 'FontSize', 16);
             obj.jointsControl = uicontrol(obj.jointsPanel, 'Style',...
                 'listbox', 'String', obj.skeleton.joint_names,...
+                'FontSize', 16, ...
                 'Units','Normalized','Callback',@(h,~,~) obj.selectNode(h.Value));
             set(obj.Parent.Children(end), 'Visible','off')
         end
         
         function setUpStatusTable(obj)
             f = figure('Units','Normalized','pos', [0 0 .5 .3],...
-                'NumberTitle','off');
+                'NumberTitle','off', 'Menubar' , 'none');
             ax = gca;
             colormap([0 0 0;.5 .5 .5;1 1 1])
             summary = zeros(size(obj.status,1), size(obj.status,3));
