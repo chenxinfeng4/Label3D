@@ -138,6 +138,12 @@ classdef Label3DImage < Label3D
                  [800*0, 600*1, 800, 600];
                  [800*1, 600*1, 800, 600];
                  [800*2, 600*1, 800, 600]}
+          views_2048x2448x6 = {[2448*0, 2048*0, 2448, 2048];
+                 [2448*1, 2048*0, 2448, 2048];
+                 [2448*2, 2048*0, 2448, 2048];
+                 [2448*0, 2048*1, 2448, 2048];
+                 [2448*1, 2048*1, 2448, 2048];
+                 [2448*2, 2048*1, 2448, 2048]}
     end
     properties (Access = public)
         imageNames
@@ -177,6 +183,8 @@ classdef Label3DImage < Label3D
                 obj.views = obj.views_1280x800x9;
             elseif isequal(size(img), [800*2, 1280*2, 3])
                 obj.views = obj.views_1280x800x4;
+            elseif isequal(size(img), [2048*2, 2448*3, 3])
+                obj.views = obj.views_2048x2448x6;
             else
                 error('No such picture arange.')
             end
