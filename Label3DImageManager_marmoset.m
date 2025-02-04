@@ -1,17 +1,17 @@
 
-classdef Label3DImageManager < handle
+classdef Label3DImageManager_marmoset < handle
     properties (Access = public)
         Parent
         labelGui
         imagefolder = './'
     end
     methods
-        function obj = Label3DImageManager()
+        function obj = Label3DImageManager_marmoset()
             obj.Parent = figure('toolbar', 'figure', 'menubar', 'none');
-            a = uimenu(obj.Parent, 'Text', 'æ–‡ä»¶');
-            uimenu(a, 'Text', '1. æ‰“å¼€æ–‡ä»¶å¤¹', 'callback', @(src, evt)obj.load_folder(src, evt));
-            uimenu(a, 'Text', '2. è½½å…¥æ ‡æ³¨æ–‡ä»¶', 'callback', @(src, evt)obj.load_anno(src, evt));
-            uimenu(a, 'Text', '3. ä¿å­˜æ ‡æ³¨æ–‡ä»¶', 'callback', @(src, evt)obj.save_anno(src, evt));
+            a = uimenu(obj.Parent, 'Text', 'ÎÄ¼ş');
+            uimenu(a, 'Text', '1. ´ò¿ªÎÄ¼ş¼Ğ', 'callback', @(src, evt)obj.load_folder(src, evt));
+            uimenu(a, 'Text', '2. ÔØÈë±ê×¢ÎÄ¼ş', 'callback', @(src, evt)obj.load_anno(src, evt));
+            uimenu(a, 'Text', '3. ±£´æ±ê×¢ÎÄ¼ş', 'callback', @(src, evt)obj.save_anno(src, evt));
             tags = {'Standard.OpenInspector', 'Standard.EditPlot', ...
                     'Annotation.InsertLegend', 'Annotation.InsertColorbar',...
                     'DataManager.Linking', 'Standard.PrintFigure',...
@@ -30,11 +30,11 @@ classdef Label3DImageManager < handle
             params = get_params(obj.imagefolder);
             delete(findobj(obj.Parent, 'type', 'axes'));
             set(obj.Parent,  'WindowKeyPressFcn', '');
-            disp('æ­£åœ¨è½½å…¥å›¾ç‰‡ï¼Œéœ€è¦åŠåˆ†é’Ÿ');
+            disp('ÕıÔÚÔØÈëÍ¼Æ¬£¬ĞèÒª°ë·ÖÖÓ');
             obj.labelGui = Label3DImage(params, obj.imagefolder, skeleton);
             if ~obj.labelGui.isKP3Dplotted; obj.labelGui.add3dPlot(); end
             set(get(obj.labelGui.statusAnimator.Axes, 'Parent'), 'visible', 'off');
-            fprintf('è½½å…¥ %d å¼ å›¾ç‰‡ã€‚ æ¥ä¸‹æ¥å¯ä»¥â€œè½½å…¥æ ‡æ³¨æ–‡ä»¶â€\n', ...
+            fprintf('ÔØÈë %d ÕÅÍ¼Æ¬¡£ ½ÓÏÂÀ´¿ÉÒÔ¡°ÔØÈë±ê×¢ÎÄ¼ş¡±\n', ...
                     size(obj.labelGui.points3D, 3));
             obj.labelGui.resetAspectRatio();
         end 
@@ -51,12 +51,12 @@ classdef Label3DImageManager < handle
             mat_data3D = mat.data_3D;
             ind_labeled = any(~isnan(mat_data3D), 2);
             if sum(ind_labeled)==0
-                warning('æ–‡ä»¶ä¸­æ ‡æ³¨ä¸ºç©º')
+                warning('ÎÄ¼şÖĞ±ê×¢Îª¿Õ')
                 return;
             elseif sum(ind_labeled)==length(ind_labeled)
-                disp('æ–‡ä»¶æ‰€æœ‰å›¾ç‰‡å‡è¢«æ ‡æ³¨')
+                disp('ÎÄ¼şËùÓĞÍ¼Æ¬¾ù±»±ê×¢')
             else
-                fprintf('æ–‡ä»¶æœ‰ %d/%d å¼ å›¾ç‰‡è¢«æ ‡æ³¨\n', sum(ind_labeled),length(ind_labeled))
+                fprintf('ÎÄ¼şÓĞ %d/%d ÕÅÍ¼Æ¬±»±ê×¢\n', sum(ind_labeled),length(ind_labeled))
             end
             mat_data3D = mat_data3D(ind_labeled,:);
             mat.imageNames = reshape(mat.imageNames, [], 1);
@@ -71,7 +71,7 @@ classdef Label3DImageManager < handle
             outer_3D_tmp = mat_data3D(ib,:);
             data_3D_tmp(~isnan(outer_3D_tmp)) = outer_3D_tmp(~isnan(outer_3D_tmp));
             data_3D(ia,:) = data_3D_tmp;
-            fprintf('è½½å…¥ %d å¼ æ ‡æ³¨\n', length(C));   
+            fprintf('ÔØÈë %d ÕÅ±ê×¢\n', length(C));   
             obj.labelGui.loadFrom3D(data_3D)
         end
         
@@ -85,24 +85,26 @@ classdef Label3DImageManager < handle
 end
 
 function skeleton = get_skeleton()
-    skeleton.joints_idx = [1,2;1,3;3,4;2,4;4,5;4,7;4,9;7,8;9,10;
-        5,6;6,11;6,13;11,12;13,14];
+    skeleton.joints_idx = [1,2;1,3;2,4;3,4;4,5;4,7;4,10;10,11;11,12;
+        7,8;8,9;5,6;6,13;6,15;15,16;13,14;];
 %     skeleton.joint_names = {'Nose','EarL','EarR','Neck','Back', ...
 %         'Tail','ForeShoulderL','ForePowL','ForeShoulderR', ...
 %         'ForePowR','BackShoulderL','BackPowL', ...
 %         'BackShoulderR','BackPowR'};
-    skeleton.joint_names = {'é¼»','å·¦<è€³>','å³<è€³>','è„–','èƒŒ', ...
-        'å°¾','å·¦å‰<è‚˜>','å·¦å‰<æŒ>','å³å‰<è‚˜>', ...
-        'å³å‰<æŒ>','å·¦å<è‚˜>','å·¦å<æŒ>', ...
-        'å³å<è‚˜>','å³å<æŒ>'};
+    skeleton.joint_names = {'±Ç','×ó<¶ú>','ÓÒ<¶ú>','²±','±³', ...
+        'Î²','×óÇ°<¼ç>','×óÇ°<Öâ>','×óÇ°<ÕÆ>','ÓÒÇ°<¼ç>','ÓÒÇ°<Öâ>', ...
+        'ÓÒÇ°<ÕÆ>','×óºó<Öâ>','×óºó<ÕÆ>', ...
+        'ÓÒºó<Öâ>','ÓÒºó<ÕÆ>'};
     skeleton.color = [1,0.98,0.69;
         0.97,0.43,0.37;
         0.45,0.85,1;
         0.45,0.85,1;
+        1,0.49,0.0;
+        0.30,0.71,1;
+        1,0.98,0.69;
         1,0.98,0.69;
         0.41,0.23,0.60;
         1,0.49,0.0;
-        1,0.98,0.69;
         0.30,0.71,1;
         0.30,0.71,1;
         0.89,0.23,0.24;
@@ -112,11 +114,11 @@ function skeleton = get_skeleton()
 end
 
 function params = get_params(imagefolder)
-    assert(exist(imagefolder, 'dir'), 'æ–‡ä»¶å¤¹ä¸å­˜åœ¨');
+%     assert(exist(imagefolder, 'dir'), 'ÎÄ¼ş¼Ğ²»´æÔÚ');
     files = dir(fullfile(imagefolder, '*.calibpkl.mat'));
     nfile = length(files);
-    if nfile>1; error('å¤šä¸ª calibpkl.mat æ–‡ä»¶åœ¨é‡Œé¢'); end
-    if nfile==0; error('æ²¡æœ‰ calibpkl.mat æ–‡ä»¶åœ¨é‡Œé¢'); end
+    if nfile>1; error('¶à¸ö calibpkl.mat ÎÄ¼şÔÚÀïÃæ'); end
+    if nfile==0; error('Ã»ÓĞ calibpkl.mat ÎÄ¼şÔÚÀïÃæ'); end
     calib_mat = fullfile(imagefolder, files(1).name);
     MAT = load(calib_mat, 'ba_poses');
     ba_poses = MAT.ba_poses;

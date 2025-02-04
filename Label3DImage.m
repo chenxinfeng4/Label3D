@@ -144,6 +144,19 @@ classdef Label3DImage < Label3D
                  [2448*0, 2048*1, 2448, 2048];
                  [2448*1, 2048*1, 2448, 2048];
                  [2448*2, 2048*1, 2448, 2048]}
+          views_640x480x6 = {[640*0, 480*0, 640, 480];
+                 [640*1, 480*0, 640, 480];
+                 [640*2, 480*0, 640, 480];
+                 [640*0, 480*1, 640, 480];
+                 [640*1, 480*1, 640, 480];
+                 [640*2, 480*1, 640, 480]
+              }
+          views_2560x1440x5 = {[2560*0, 1440*0, 2560, 1440];
+                 [2560*1, 1440*0, 2560, 1440];
+                 [2560*2, 1440*0, 2560, 1440];
+                 [2560*0, 1440*1, 2560, 1440];
+                 [2560*1, 1440*1, 2560, 1440]
+              }
     end
     properties (Access = public)
         imageNames
@@ -183,8 +196,14 @@ classdef Label3DImage < Label3D
                 obj.views = obj.views_1280x800x9;
             elseif isequal(size(img), [800*2, 1280*2, 3])
                 obj.views = obj.views_1280x800x4;
+%             elseif isequal(size(img), [1440*5, 2560*1, 3])
+%                 obj.views = obj.views_2560x1440x5;
             elseif isequal(size(img), [2048*2, 2448*3, 3])
                 obj.views = obj.views_2048x2448x6;
+            elseif isequal(size(img), [480*2, 640*3, 3])
+                obj.views = obj.views_640x480x6;
+            elseif isequal(size(img), [1440*2, 2560*3, 3])
+                obj.views = obj.views_2560x1440x5;
             else
                 error('No such picture arange.')
             end
