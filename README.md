@@ -1,20 +1,23 @@
 # Label3D
 
-Label3D is a GUI for the manual labeling of 3D keypoints in multiple cameras.
-![Label3D Animation](common/label3dAnimation.gif)
+Label3D is a GUI for the manual labeling of 3D keypoints in multiple cameras. Forked from [diegoaldarondo/Label3D](https://github.com/diegoaldarondo/Label3D)
+
+
+
+
 
 ## Installation
 
 Label3D is dependent on other git repositories. To install dependencies recursively use:
 
 ```
-git clone  --recurse-submodules https://github.com/diegoaldarondo/Label3D.git
+git clone  --recurse-submodules https://github.com/chenxinfeng4/Label3D.git
 ```
 
 Otherwise you can manually install dependencies.
 
 ```
-git clone https://github.com/diegoaldarondo/Label3D.git
+git clone https://github.com/chenxinfeng4/Label3D.git
 cd Label3D/deps
 git clone https://github.com/diegoaldarondo/Animator.git
 ```
@@ -24,7 +27,6 @@ git clone https://github.com/diegoaldarondo/Animator.git
 2. Multiview triangulation of 3D keypoints
 3. Point-and-click and draggable gestures to label keypoints
 4. Zooming, panning, and other default Matlab gestures
-5. Integration with `Animator` classes
 
 ## Usage
 Requires `Matlab 2019b`, `Matlab 2020a`, or `Matlab 2020b`
