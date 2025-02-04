@@ -1,16 +1,14 @@
 # Label3D
 
-Label3D is a GUI for the manual labeling of 3D keypoints in multiple cameras. Forked from [diegoaldarondo/Label3D](https://github.com/diegoaldarondo/Label3D)
-
+Label3D is a GUI for the manual labeling of 3D keypoints in multiple cameras. Forked and improve from [diegoaldarondo/Label3D](https://github.com/diegoaldarondo/Label3D).
 
 
 ![img](common/label3D.jpg)
 
 
-
 ## Installation
 
-To install Label3D,. use:
+Requires `Matlab 2019b`, `Matlab 2020a`, or `Matlab 2020b` To install Label3D, use:
 
 ```cmd
 git clone --depth=1 https://github.com/chenxinfeng4/Label3D.git Label3D
@@ -31,18 +29,11 @@ Now, you will see the label3D GUI popping out.
 3. Point-and-click and draggable gestures to label keypoints
 4. Zooming, panning, and other default Matlab gestures
 
-## Improvement from original code (diegoaldarondo)
-
-- The camera calibration file is specified in `ball_xx.calibpkl.mat` in this project.
-- The label source is image file in this project, is video file in the orginal project.
-- The original project requires large depends downloading.
-- The keypoint order is customized in this project.
-
 
 
 ## 使用方法
 
-Requires `Matlab 2019b`, `Matlab 2020a`, or `Matlab 2020b`
+
 
 1. 进入Matlab，打开 Label3DImageManager. 
 
@@ -52,7 +43,7 @@ Requires `Matlab 2019b`, `Matlab 2020a`, or `Matlab 2020b`
 
 ![img](common/label3D_loading.jpg)
 
-2. “打开文件夹”，例如 “testdata/”, 包含图片和 mat 文件。等待半分钟数据载入。**载入新文件夹，请重启软件，以防错误。**
+2. “打开文件夹”，例如本项目提供的测试数据： “testdata/”, 包含图片和 mat 文件。等待半分钟数据载入。**载入新文件夹，请重启软件，以防错误。**
 
 ![img](common/label3D_loading_folder.jpg)
 
@@ -85,6 +76,20 @@ Requires `Matlab 2019b`, `Matlab 2020a`, or `Matlab 2020b`
 
 ![img](common/label3D_err_msg.jpg)
 
+
+
+## 代码改进（对比原始 diegoaldarondo 代码）
+
+
+|                | 原始代码 (diegoaldarondo) | 本项目改进                |
+| -------------- | ------------------------- | ------------------------- |
+| 代码大小       | 冗余 300Mb                | 精简后为 11 Mb            |
+| 依赖关系       | 额外下载                  | 已整合                    |
+| 安装方式       | 手动                      | 自动                      |
+| 多相机矫正文件 | 未指明                    | 通过`xx.calibpkl.mat`提供 |
+| 输入标注数据   | 导入多路视频文件              | 导入图片文件夹，每张图片包含多路视角        |
+| 代码入口 | >> Label3D | >> Label3DImageManager |
+| 更改关键点名称、颜色、顺序     | 分散在许多文件     | 只用修改 Label3DImageManager.m                        |
 
 
 代码参考自 https://github.com/diegoaldarondo/Label3D
