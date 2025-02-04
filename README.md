@@ -4,23 +4,26 @@ Label3D is a GUI for the manual labeling of 3D keypoints in multiple cameras. Fo
 
 
 
+![img](common/label3D.jpg)
+
 
 
 ## Installation
 
-Label3D is dependent on other git repositories. To install dependencies recursively use:
+To install Label3D,. use:
 
-```
-git clone  --recurse-submodules https://github.com/chenxinfeng4/Label3D.git
+```cmd
+git clone --depth=1 https://github.com/chenxinfeng4/Label3D.git Label3D
 ```
 
-Otherwise you can manually install dependencies.
+Open the Label3D folder, and run `setup.bat`. This will append the code path into matlab path manager.
 
+Now, you will see the label3D GUI popping out.
+
+```matlab
+>> Label3DImageManager
 ```
-git clone https://github.com/chenxinfeng4/Label3D.git
-cd Label3D/deps
-git clone https://github.com/diegoaldarondo/Animator.git
-```
+
 
 ## Features
 1. Simultaneous viewing of any number of camera views
@@ -28,24 +31,61 @@ git clone https://github.com/diegoaldarondo/Animator.git
 3. Point-and-click and draggable gestures to label keypoints
 4. Zooming, panning, and other default Matlab gestures
 
-## Usage
+## Improvement from original code (diegoaldarondo)
+
+- The camera calibration file is specified in `ball_xx.calibpkl.mat` in this project.
+- The label source is image file in this project, is video file in the orginal project.
+- The original project requires large depends downloading.
+- The keypoint order is customized in this project.
+
+
+
+## 使用方法
+
 Requires `Matlab 2019b`, `Matlab 2020a`, or `Matlab 2020b`
 
-Label3D takes a cell arrays of structs of camera parameters as in
-https://github.com/spoonsso/DANNCE, a cell array of corresponding videos (h,w,c,N),
-and a skeleton struct defining a directed graph. Please look at `example.m`
-for examples on how to format data.
+1. 进入Matlab，打开 Label3DImageManager. 
 
 ```
-labelGui = Label3D(params, videos, skeleton);
+>> Label3DImageManager
 ```
 
-## [Manual](https://github.com/diegoaldarondo/Label3D/wiki)
-* [About](https://github.com/diegoaldarondo/Label3D/wiki/About)
-* [Documentation](https://github.com/diegoaldarondo/Label3D/wiki/Documentation)
-* [Gestures and hotkeys](https://github.com/diegoaldarondo/Label3D/wiki/Gestures-and-hotkeys)
-* [Setup](https://github.com/diegoaldarondo/Label3D/wiki/Setup)
+![img](common/label3D_loading.jpg)
 
-Written by Diego Aldarondo (2019)
+2. “打开文件夹”，例如 “testdata/”, 包含图片和 mat 文件。等待半分钟数据载入。**载入新文件夹，请重启软件，以防错误。**
 
-Some code adapted from https://github.com/talmo/leap
+![img](common/label3D_loading_folder.jpg)
+
+
+
+3. “载入和保存标注文件”，文件名为 “anno.mat”
+
+![img](common/label3D_loading_anno.jpg)
+
+![img](common/label3D_loaded_gui.jpg)
+
+4. 常用快捷键
+
+| 快捷键  | 功能                                               |
+| ------- | -------------------------------------------------- |
+| `t`     | 2D -> 3D。（需要至少2个视角的2D点，推荐3-5个视角） |
+| `TAB`   | 下一个关键点                                       |
+| `f`     | 等于 `t` 加 `→`                                    |
+| `x`     | 删除当前一个3D关键点                               |
+| `u`     | 删除当前所有3D关键点                               |
+| `p`     | 是否显示 3D 模型图（默认开启）                     |
+| `z`     | 放大（Zoom）                                       |
+| `←` `→` | 前一张，后一张图片                                 |
+
+如果“快捷键”没有反应，可能是1 . “开启了功能区”没有关闭。2. 要切换到“英文输入法”
+
+![img](common/label3D_gui_closeTheMenu.jpg)
+
+5. 操作错误提示，可见黑框中
+
+![img](common/label3D_err_msg.jpg)
+
+
+
+代码参考自 https://github.com/diegoaldarondo/Label3D
+

@@ -1,0 +1,1 @@
+matlab -nosplash -nodesktop -r "run('setup.m');pause(2);exit;"
